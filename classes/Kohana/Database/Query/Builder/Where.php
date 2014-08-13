@@ -42,7 +42,14 @@ abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builde
 	 */
 	public function and_where($column, $op, $value)
 	{
-		$this->_where[] = array('AND' => array($column, $op, $value));
+		if(strtoupper($op) == 'IN' && empty($value))
+		{
+			$this->_where[] = array('AND' => array(DB::expr(1), '=', 0));
+		}
+		else
+		{
+			$this->_where[] = array('AND' => array($column, $op, $value));
+		}
 
 		return $this;
 	}
@@ -57,7 +64,14 @@ abstract class Kohana_Database_Query_Builder_Where extends Database_Query_Builde
 	 */
 	public function or_where($column, $op, $value)
 	{
-		$this->_where[] = array('OR' => array($column, $op, $value));
+		if(strtoupper($op) == 'IN' && empty($value))
+		{
+			$this->_where[] = array('OR' => array(DB::expr(1), '=', 0));
+		}
+		else
+		{
+			$this->_where[] = array('OR' => array($column, $op, $value));
+		}
 
 		return $this;
 	}
